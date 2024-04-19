@@ -1,0 +1,11 @@
+import os
+import signal
+from locust import HttpUser, task, between, events
+
+def shutdown_handler(signum, frame):
+    print("Shutdown signal received. Shutting down Locust.")
+    events.quitting.fire(reverse=True)
+
+# Register the shutdown handler
+signal.signal(signal.SIGINT, shutdown_handler)
+signal.signal(signal.SIGTERM, shutdown_handler)

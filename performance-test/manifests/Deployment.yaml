@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locust
+  template:
+    metadata:
+      labels:
+        app: locust
+    spec:
+      containers:
+      - name: locust
+        image: sunwukhan/my-locust-app:latest
+        ports:
+        - containerPort: 8089
+        env:
+          - name: HOST
+            valueFrom:
+              configMapKeyRef:
+                name: locust-config
+                key: HOST
+          - name: USERS
+            valueFrom:
+              configMapKeyRef:
+                name: locust-config
+                key: USERS
+          - name: SPAWN_RATE
+            valueFrom:
+              configMapKeyRef:
+                name: locust-config
+                key: SPAWN_RATE
+          - name: RUN_TIME
+            valueFrom:
+              configMapKeyRef:
+                name: locust-config
+                key: RUN_TIME
+          - name: LOCUST_FILE
+            valueFrom:
+              configMapKeyRef:
+                name: locust-config
+                key: LOCUST_FILE
